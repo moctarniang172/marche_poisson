@@ -1,0 +1,133 @@
+<?php
+
+class Vente{
+    private $nom_client;
+    private $poisson;
+    private $poids;
+    private $prix_unitaire;
+    private $total;
+    private $avance;
+    private $reste;
+    private $date_vente;
+
+
+    //constructeur pour ques les attributs soient initialisés lors de la création d'un objet Vente
+
+    public function __construct($nom_client, $poisson, $poids, $prix_unitaire, $avance, $date_vente){
+        $this->nom_client = $nom_client;
+        $this->poisson = $poisson;
+        $this->poids = $poids;
+        $this->prix_unitaire = $prix_unitaire;
+        $this->total = $poids * $prix_unitaire;
+        $this->avance = $avance;
+        $this->reste = $this->total - $avance;
+        $this->date_vente = $date_vente ?? date('Y-m-d');
+    }
+
+    //pour enregistrer une vente
+    public function enregistrerVente($conn){
+        $query = "INSERT INTO ventes (nom_client, poisson, poids, prix_unitaire, total, avance, reste, date_vente) 
+                  VALUES (:nom_client, :poisson, :poids, :prix_unitaire, :total, :avance, :reste, :date_vente)";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':nom_client', $this->nom_client);
+        $stmt->bindParam(':poisson', $this->poisson);
+        $stmt->bindParam(':poids', $this->poids);
+        $stmt->bindParam(':prix_unitaire', $this->prix_unitaire);
+        $stmt->bindParam(':total', $this->total);
+        $stmt->bindParam(':avance', $this->avance);
+        $stmt->bindParam(':reste', $this->reste);
+        $stmt->bindParam(':date_vente', $this->date_vente);
+        return $stmt->execute();
+
+}
+
+//recuperer les ventes
+public function getDettes($conn)
+{
+    $sql = "SELECT * FROM ventes WHERE reste >00 ORDER BY date_vente DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//recuperer tout les ventes
+public function getventes($conn,$date)
+{
+    $sql = "SELECT * FROM ventes WHERE date_vente = :date ORDER BY date_vente DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':date', $this->$date);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+//methode pour paiememnt de dette
+public function enregistrerPaiement($conn, $montant, $id_vente)
+{
+    // 1. Ajouter le paiement dans la table paiements
+    $stmt = $conn->prepare("
+        INSERT INTO paiements (id_vente, montant)
+        VALUES (:id_vente, :montant)
+    ");
+    $stmt->execute([
+        ':id_vente' => $id_vente,':montant' => $montant ]);
+
+    // 2. Mettre à jour l'avance
+    $stmt2 = $conn->prepare(" UPDATE ventes SET avance = avance + :montant WHERE id = :id ");
+    $stmt2->execute([ ':montant' => $montant, ':id' => $id_vente ]);
+
+    // 3. Recalculer le reste proprement
+    $stmt3 = $conn->prepare("UPDATE ventes SET reste = GREATEST(total - avance, 0)  WHERE id = :id ");
+
+    $stmt3->execute([':id' => $id_vente]);
+
+    return true;
+}
+
+//liste des creancier pyer
+public function operation($conn){
+    $query = $conn->prepare("
+        SELECT 
+            p.id AS paiement_id,
+            p.id_vente,
+            p.montant,
+            p.date_paiement,
+            v.nom_client,
+            v.poisson,
+            v.poids,
+            v.total,
+            v.avance,
+            v.reste
+        FROM paiements AS p
+        INNER JOIN ventes AS v ON p.id_vente = v.id
+        ORDER BY p.date_paiement DESC
+    ");
+
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC); 
+}
+
+//systeme de filtrage 
+public function filtrage($conn, $nom) {
+  $query = "SELECT 
+            p.id_vente, 
+            p.montant, 
+            p.date_paiement, 
+            v.nom_client, 
+            v.poisson, 
+            v.poids, 
+            v.reste, 
+            v.date_vente
+          FROM paiements AS p
+          INNER JOIN ventes AS v ON p.id_vente = v.id
+          WHERE v.nom_client LIKE :nom
+          ORDER BY p.date_paiement DESC";
+
+    $stmt = $conn->prepare($query);
+    // Ajouter les valeurs liées
+    $stmt->bindValue(':nom', '%' . $nom . '%'); // les % pour le LIKE
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+}
