@@ -174,7 +174,7 @@
                 <tr>
                     <td><?= $d['motif'] ?></td>
                     <td><?= $d['montant'] ?> FCFA</td>
-                    <td><?= date("d/m/Y", strtotime($d['date'])) ?></td>
+                    <td><?= date("d/m/Y", strtotime($d['date_depense'])) ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

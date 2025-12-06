@@ -8,6 +8,12 @@
 </head>
 <body class="p-4">
 <div class="container">
+   <form action="../controllers/filtre.php" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="nom_client" class="form-control" placeholder="Entrez le nom du client" required>
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+        </div>
+    </form>
   <h3>Liste des dettes</h3>
   <table class="table table-striped">
     <thead>

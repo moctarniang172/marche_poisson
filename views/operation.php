@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+ $title = "Ajouter Vente"; include("layout.php");
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -12,8 +13,14 @@ error_reporting(E_ALL);
 <body class="bg-light">
 
 <div class="container mt-5">
-
     <h2 class="mb-4">Historique des Paiements</h2>
+     <form action="../controllers/filtre.php" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="nom_client" class="form-control" placeholder="Entrez le nom du client" required>
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+        </div>
+    </form>
+
 
     <table class="table table-bordered table-striped">
         <thead>

@@ -15,10 +15,10 @@
 
         <div>
             <a href="../views/ajouter_vente.php" class="btn btn-light btn-sm me-2">Ajouter Vente</a>
-            <a href="../views/liste.php" class="btn btn-light btn-sm me-2">Ventes</a>
-            <a href="../controllers/liste_dettes.php" class="btn btn-light btn-sm me-2">Dettes</a>
+            <a href="../views/liste_ventes.php" class="btn btn-light btn-sm me-2">Ventes</a>
+            <a href="../controllers/controllerOperation.php" class="btn btn-light btn-sm me-2">Historique</a>
             <a href="../controllers/controllerDataDette.php" class="btn btn-light btn-sm me-2">Paiements</a>
-            <a href="../views/depenses.php" class="btn btn-light btn-sm me-2">Dépenses</a>
+            <a href="../views/depences.php" class="btn btn-light btn-sm me-2">Dépenses</a>
             <a href="../views/bilan.php" class="btn btn-warning btn-sm">Bilan</a>
         </div>
     </div>
