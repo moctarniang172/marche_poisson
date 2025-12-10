@@ -36,8 +36,8 @@ error_reporting(E_ALL);
         </thead>
 
         <tbody>
-            <?php if (!empty($operation)): ?>
-                <?php foreach ($operation as $p): ?>
+            <?php if (!empty( $dettes)): ?>
+                <?php foreach ($dettes as $p): ?>
                 <tr>
                     <td><?= htmlspecialchars($p['nom_client']) ?></td>
                     <td><?= htmlspecialchars($p['poisson']) ?></td>

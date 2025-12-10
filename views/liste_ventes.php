@@ -1,7 +1,20 @@
-<?php $title = "Liste Ventes"; include("layout.php");
+<?php
+ini_set("display_errors",1);
+error_reporting(E_ALL);
+ $title = "Liste Ventes"; include("layout.php");
 require_once __DIR__ . '/../authers/fonctions.php';
+require_once __DIR__ . '/../mes_classes/Database.php';
+require_once __DIR__ . '/../mes_classes/fonction.php';
 
 verfierConnexion();
+$user_id = $_SESSION['user_id'] ?? null;
+
+$db = new Database();
+$connexion = $db->getConnection();
+
+$fonction = new Fonction();
+$ventesjours = $fonction->venteJours($connexion,$user_id);
+
  ?>
 
 <h3 class="fw-bold mb-4">📄 Liste des Ventes</h3>
@@ -17,12 +30,12 @@ verfierConnexion();
             <th>Avance</th>
             <th>Reste</th>
             <th>Date</th>
-            <th>Payer</th>
+            <th>Action</th>
         </tr>
     </thead>
 
     <tbody>
-        <?php foreach($ventes as $v): ?>
+        <?php foreach($ventesjours as $v): ?>
         <tr>
             <td><?= $v['id'] ?></td>
             <td><?= $v['nom_client'] ?></td>
@@ -35,7 +48,7 @@ verfierConnexion();
 
             <td>
                 <?php if($v['reste'] > 0): ?>
-                <a href="payer.php?id=<?= $v['id'] ?>" class="btn btn-success btn-sm">Payer</a>
+                <a href="modifier.php?id=<?= $v['id'] ?>" class="btn btn-success btn-sm">modifier</a>
                 <?php else: ?>
                 <span class="badge bg-success">Payé</span>
                 <?php endif; ?>
@@ -45,4 +58,4 @@ verfierConnexion();
     </tbody>
 </table>
 
-<?php include("layout_footer.php"); ?>
+

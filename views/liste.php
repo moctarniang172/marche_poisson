@@ -11,7 +11,7 @@ verfierConnexion(); ?>
 </head>
 <body class="p-4">
 <div class="container">
-   <form action="../controllers/filtre.php" method="GET" class="mb-4">
+   <form action="../controllers/controllerDataDette.php" method="GET" class="mb-4">
         <div class="input-group">
             <input type="text" name="nom_client" class="form-control" placeholder="Entrez le nom du client" required>
             <button type="submit" class="btn btn-primary">Filtrer</button>
@@ -33,7 +33,7 @@ verfierConnexion(); ?>
       </tr>
     </thead>
     <tbody>
- <?php foreach ($listeDettes as $d): ?>
+ <?php foreach ($dettefiltrage as $d): ?>
     <tr>
         <td><?= $d['id'] ?></td>
         <td><?= $d['nom_client'] ?></td>

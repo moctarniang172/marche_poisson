@@ -1,6 +1,5 @@
 <?php $title = "Ajouter Vente"; include("layout.php");
 require_once __DIR__ . '/../authers/fonctions.php';
-
 verfierConnexion();
  ?>
 <!DOCTYPE html>

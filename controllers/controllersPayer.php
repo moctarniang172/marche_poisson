@@ -17,9 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $montant = floatval($_POST['montant']);
 
     $vente = new Vente($conn,null,null,null,null,null,null);
-
     $resultat = $vente->enregistrerPaiement($conn, $montant, $id_vente);
-
     if ($resultat) {
         echo "<p style='color:green;text-align:center'>Paiement enregistré avec succès !</p>";
         header("Refresh: 2; URL=../views/liste.php");

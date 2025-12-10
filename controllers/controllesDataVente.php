@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 // 1️⃣ On inclut les fichiers nécessaires
 require_once '../mes_classes/Database.php';
 require_once '../mes_classes/Vente.php';
+require_once '../mes_classes/fonction.php';
 require_once('../authers/fonctions.php');
 
  //  Vérification de la session
@@ -14,6 +15,9 @@ require_once('../authers/fonctions.php');
 
 // Récupération de l'ID utilisateur connecté
 $user_id = $_SESSION['user_id'] ?? null;
+
+ $db = new Database();
+$connexion = $db->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom_client = $_POST['nom_client'];
@@ -24,8 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reste = $_POST['reste'];
   
     // On crée une instance de Database et on récupère la connexion
-    $db = new Database();
-    $connexion = $db->getConnection();
+   
 
     //  On crée un objet Vente avec les données du formulaire
     $vente = new Vente($user_id,$nom_client, $poisson, $poids, $prix_unitaire, $avance, null);
@@ -44,4 +47,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si on arrive sur cette page sans soumettre le formulaire
     echo "<p>Accès direct interdit. <a href='index.php'>Retour</a></p>";
 }
+
 ?>

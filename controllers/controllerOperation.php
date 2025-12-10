@@ -12,10 +12,11 @@ verfierConnexion();
 $user_id = $_SESSION['user_id'] ?? null;
 
 $db = new Database();
+
 $connexion= $db->getConnection();
 
 $liste = new Vente($user_id,$connexion,null,null,null,null,null);
 
-$operation = $liste->operation($connexion);
+$operation = $liste->filtragePaiement($connexion,$user_id,);
 
 include '../views/operation.php';

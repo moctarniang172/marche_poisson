@@ -40,9 +40,11 @@ class Fonction {
         $sql = "SELECT SUM(p.montant) AS dette_du_jour
                 FROM paiements p
                 INNER JOIN ventes v ON p.id_vente = v.id
-                WHERE v.user_id = :user_id AND DATE(p.date_paiement) = :dateAND DATE(v.date_vente) = :date";
+                WHERE v.user_id = :user_id
+                AND DATE(p.date_paiement) = :date
+                AND DATE(v.date_vente) = :date";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([ 'user_id' => $user_id,'date'=> $date]);
+        $stmt->execute(['user_id' => $user_id,'date'=> $date]);
         return $stmt->fetch(PDO::FETCH_ASSOC)['dette_du_jour'] ?? 0;
     }
 
@@ -56,15 +58,20 @@ class Fonction {
                 AND DATE(v.date_vente) != :date";
 
         $stmt = $conn->prepare($sql);
-        $stmt->execute(['user_id' => $user_id,'date'=> $date]);
+        $stmt->execute(['user_id' => $user_id,'date'=> $date
+        ]);
+
         return $stmt->fetch(PDO::FETCH_ASSOC)['anciennes_dettes'] ?? 0;
     }
 
     /* ---------------- LISTE DES VENTES DU JOUR ---------------- */
     public function ventesDuJour($conn, $user_id, $date) {
-        $sql = "SELECT * FROM ventes  WHERE user_id = :user_id AND DATE(date_vente) = :date  ORDER BY id DESC";
+        $sql = "SELECT * FROM ventes 
+                WHERE user_id = :user_id
+                AND DATE(date_vente) = :date
+                ORDER BY id DESC";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([ 'user_id' => $user_id,'date'=> $date]);
+        $stmt->execute(['user_id' => $user_id,'date'=> $date]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -75,11 +82,8 @@ class Fonction {
                 INNER JOIN ventes v ON p.id_vente = v.id
                 WHERE v.user_id = :user_id
                 AND DATE(p.date_paiement) = :date";
-
         $stmt = $conn->prepare($sql);
-        $stmt->execute([
-            'user_id' => $user_id,
-            'date'    => $date
+        $stmt->execute(['user_id' => $user_id,'date'=> $date
         ]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -87,9 +91,30 @@ class Fonction {
 
     /* ---------------- LISTE DES DEPENSES DU JOUR ---------------- */
     public function depensesDuJour($conn, $user_id, $date) {
-        $sql = "SELECT * FROM depances WHERE user_id = :user_id AND DATE(date_depense) = :date ORDER BY id DESC";
+        $sql = "SELECT * FROM depances 
+                WHERE user_id = :user_id
+                AND DATE(date_depense) = :date
+                ORDER BY id DESC";
         $stmt = $conn->prepare($sql);
         $stmt->execute(['user_id' => $user_id,'date'=> $date]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /* ---------------- SECURITÉ : VÉRIFIER CONNEXION ---------------- */
+    public function conected() {
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: ../views/connexion.php");
+            exit();
+        }
+    }
+
+    public function venteJours($conn,$user_id){
+        $query = "SELECT * FROM ventes WHERE user_id = :user_id AND DATE(date_vente) = CURDATE()";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id',$user_id);
+        $stmt->execute();
+        return $stmt->fetchall(PDO::FETCH_ASSOC);
+    }
+
 }

@@ -45,10 +45,11 @@ class Vente{
 }
 
 //recuperer les ventes
-public function getDettes($conn)
+public function getDettes($conn,$user_id)
 {
-    $sql = "SELECT * FROM ventes WHERE reste >00 ORDER BY date_vente DESC";
+    $sql = "SELECT * FROM ventes WHERE user_id = :user_id AND reste >00 ORDER BY date_vente DESC";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id',$this->user_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -83,10 +84,8 @@ public function enregistrerPaiement($conn, $montant, $id_vente)
     return true;
 }
 
-//liste des creancier pyer
-public function operation($conn){
-    $query = $conn->prepare("
-        SELECT 
+public function operation($conn,$user_id) {
+    $sql = "SELECT 
             p.id AS paiement_id,
             p.id_vente,
             p.montant,
@@ -98,16 +97,17 @@ public function operation($conn){
             v.avance,
             v.reste
         FROM paiements AS p
-        INNER JOIN ventes AS v ON p.id_vente = v.id
-        ORDER BY p.date_paiement DESC
-    ");
-
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_ASSOC); 
+        INNER JOIN ventes AS v 
+            ON p.id_vente = v.id
+        WHERE v.user_id = :user_id
+        ORDER BY p.date_paiement DESC ";
+    $query = $conn->prepare($sql);
+    $query->execute(['user_id' => $user_id]);
+    return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-//systeme de filtrage 
-public function filtrage($conn, $nom) {
+//systeme de filtrage pour les dettes a payer
+public function filtrage($conn,$user_id, $nom) {
   $query = "SELECT 
             p.id_vente, 
             p.montant, 
@@ -115,18 +115,64 @@ public function filtrage($conn, $nom) {
             v.nom_client, 
             v.poisson, 
             v.poids, 
+            v.total,
             v.reste, 
             v.date_vente
           FROM paiements AS p
           INNER JOIN ventes AS v ON p.id_vente = v.id
-          WHERE v.nom_client LIKE :nom
+          WHERE v.nom_client LIKE :nom AND v.user_id = :user_id
           ORDER BY p.date_paiement DESC";
 
     $stmt = $conn->prepare($query);
     // Ajouter les valeurs liées
+    $stmt->bindParam(':user_id',$user_id);
     $stmt->bindValue(':nom', '%' . $nom . '%'); // les % pour le LIKE
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+//syteme de filtrage pour la liste des dettes posibles
+public function filtragedette($conn,$user_id,$nom){
+    $query = "SELECT * FROM ventes WHERE reste >0 AND user_id = :user_id AND nom_client LIKE :nom ";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':user_id',$user_id);
+    $stmt->bindValue(':nom', '%' . $nom . '%');
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+public function filtragePaiement($conn,$nom)
+{
+    $query = "SELECT 
+                p.id_vente,
+                p.montant,
+                p.date_paiement,
+                v.nom_client,
+                v.poisson,
+                v.poids,
+                v.reste,
+                v.date_vente
+              FROM paiements AS p
+              INNER JOIN ventes AS v ON p.id_vente = v.id
+              WHERE v.user_id = :user_id
+                AND v.nom_client LIKE :nom
+              ORDER BY p.date_paiement DESC";
+
+    $stmt = $conn->prepare($query);
+
+    $stmt->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+    $stmt->bindValue(':nom', '%' . $nom . '%', PDO::PARAM_STR);
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+//liste des dettes
+public function listedette($conn,$user_id){
+    $query = "SELECT * FROM ventes WHERE user_id = :user_id AND reste >00";
+    $stmt= $conn->prepare($query);
+    $stmt->bindParam('user_id',$user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 }
