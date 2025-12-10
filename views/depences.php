@@ -1,4 +1,7 @@
-<?php $title = "Ajouter Vente"; include("layout.php"); ?>
+<?php $title = "Ajouter Vente"; include("layout.php"); 
+require_once __DIR__ . '/../authers/fonctions.php';
+
+verfierConnexion();?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -40,7 +43,7 @@
 
             <!-- Type de dépense -->
             <div class="mb-3">
-                <label class="form-label">Montant (FCFA)</label>
+                <label class="form-label">Motif</label>
                 <input type="text" class="form-control" name="motif" id="motif"  required>
             </div>
 

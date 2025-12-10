@@ -1,6 +1,7 @@
 <?php
 
 class Vente{
+    private $user_id;
     private $nom_client;
     private $poisson;
     private $poids;
@@ -13,7 +14,8 @@ class Vente{
 
     //constructeur pour ques les attributs soient initialisés lors de la création d'un objet Vente
 
-    public function __construct($nom_client, $poisson, $poids, $prix_unitaire, $avance, $date_vente){
+    public function __construct($user_id,$nom_client, $poisson, $poids, $prix_unitaire, $avance, $date_vente){
+        $this->user_id = $user_id;
         $this->nom_client = $nom_client;
         $this->poisson = $poisson;
         $this->poids = $poids;
@@ -26,9 +28,10 @@ class Vente{
 
     //pour enregistrer une vente
     public function enregistrerVente($conn){
-        $query = "INSERT INTO ventes (nom_client, poisson, poids, prix_unitaire, total, avance, reste, date_vente) 
-                  VALUES (:nom_client, :poisson, :poids, :prix_unitaire, :total, :avance, :reste, :date_vente)";
+        $query = "INSERT INTO ventes (user_id,nom_client, poisson, poids, prix_unitaire, total, avance, reste, date_vente) 
+                  VALUES (:user_id,:nom_client, :poisson, :poids, :prix_unitaire, :total, :avance, :reste, :date_vente)";
         $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':nom_client', $this->nom_client);
         $stmt->bindParam(':poisson', $this->poisson);
         $stmt->bindParam(':poids', $this->poids);
@@ -50,11 +53,12 @@ public function getDettes($conn)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-//recuperer tout les ventes
-public function getventes($conn,$date)
+//recuperer tout les ventes d'un utilisateur
+public function getventes($conn,$user_id,$date)
 {
-    $sql = "SELECT * FROM ventes WHERE date_vente = :date ORDER BY date_vente DESC";
+    $sql = "SELECT * FROM ventes WHERE user_id = :user_id AND date_vente = :date ORDER BY date_vente DESC";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $this->user_id);
     $stmt->bindParam(':date', $this->$date);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -65,12 +69,8 @@ public function getventes($conn,$date)
 public function enregistrerPaiement($conn, $montant, $id_vente)
 {
     // 1. Ajouter le paiement dans la table paiements
-    $stmt = $conn->prepare("
-        INSERT INTO paiements (id_vente, montant)
-        VALUES (:id_vente, :montant)
-    ");
-    $stmt->execute([
-        ':id_vente' => $id_vente,':montant' => $montant ]);
+    $stmt = $conn->prepare("INSERT INTO paiements (id_vente, montant)VALUES (:id_vente, :montant)");
+    $stmt->execute([':id_vente' => $id_vente,':montant' => $montant ]);
 
     // 2. Mettre à jour l'avance
     $stmt2 = $conn->prepare(" UPDATE ventes SET avance = avance + :montant WHERE id = :id ");
@@ -78,8 +78,7 @@ public function enregistrerPaiement($conn, $montant, $id_vente)
 
     // 3. Recalculer le reste proprement
     $stmt3 = $conn->prepare("UPDATE ventes SET reste = GREATEST(total - avance, 0)  WHERE id = :id ");
-
-    $stmt3->execute([':id' => $id_vente]);
+    $stmt3->execute([':id'=> $id_vente]);
 
     return true;
 }

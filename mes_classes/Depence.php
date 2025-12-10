@@ -1,11 +1,13 @@
 <?php
 class Depence{
     private  $table = "depances";
+    private $user_id;
     private  $montant;
     private $motif; 
     private  $date;
 
-    public function __construct($montant,$motif, $date) {
+    public function __construct($user_id,$montant,$motif, $date) {
+        $this->user_id = $user_id;
         $this->montant = $montant;
         $this->motif = $motif;
         $this->date = $date_vente ?? date('Y-m-d');
@@ -13,8 +15,9 @@ class Depence{
     }
 
     public function addDepence($conn){
-        $query = "INSERT INTO $this->table(montant,motif,date_depense)VALUES (:montant,:motif,:date_depense)";
+        $query = "INSERT INTO $this->table(user_id,montant,motif,date_depense)VALUES (:user_id,:montant,:motif,:date_depense)";
         $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id',$this->user_id);
         $stmt->bindParam(':montant',$this->montant);
         $stmt->bindParam(':motif',$this->motif);
         $stmt->bindParam(':date_depense',$this->date);

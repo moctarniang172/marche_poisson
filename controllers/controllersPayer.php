@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_vente = intval($_POST['id_vente']);
     $montant = floatval($_POST['montant']);
 
-    $vente = new Vente($conn,null,null,null,null,null);
+    $vente = new Vente($conn,null,null,null,null,null,null);
 
     $resultat = $vente->enregistrerPaiement($conn, $montant, $id_vente);
 

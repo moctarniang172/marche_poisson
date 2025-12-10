@@ -1,4 +1,8 @@
-<?php $title = "Liste Ventes"; include("layout.php"); ?>
+<?php $title = "Liste Ventes"; include("layout.php");
+require_once __DIR__ . '/../authers/fonctions.php';
+
+verfierConnexion();
+ ?>
 
 <h3 class="fw-bold mb-4">📄 Liste des Ventes</h3>
 

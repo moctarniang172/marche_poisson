@@ -20,6 +20,7 @@
             <a href="../controllers/controllerDataDette.php" class="btn btn-light btn-sm me-2">Paiements</a>
             <a href="../views/depences.php" class="btn btn-light btn-sm me-2">Dépenses</a>
             <a href="../views/bilan.php" class="btn btn-warning btn-sm">Bilan</a>
+             <a href="../controllers/controllerLogout.php" class="btn btn-warning btn-sm">deconnecter</a>
         </div>
     </div>
 </nav>
