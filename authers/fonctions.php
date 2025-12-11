@@ -14,3 +14,10 @@ function redirectIfLogged() {
         exit();
     }
 }
+function verifierAdmin(){
+    if(!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== "admin"){
+        // l'utilisateur n'a pas le droit → on le renvoie
+        header("Location: ../views/ajouter_vente.php");
+        exit;
+    }
+}

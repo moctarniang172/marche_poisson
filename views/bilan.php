@@ -84,11 +84,12 @@ verfierConnexion();?>
 
 
     <!-- SECTION VENTES DU JOUR -->
-    <div class="card p-4 shadow mb-4">
-        <h4>📦 Ventes du jour</h4>
+  <div class="card p-3 p-md-4 shadow mb-4">
+    <h4>📦 Ventes du jour</h4>
 
-        <?php if (!empty($ventes_jour)): ?>
-        <table class="table table-striped mt-3">
+    <?php if (!empty($ventes_jour)): ?>
+    <div class="table-responsive mt-3">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Client</th>
@@ -114,11 +115,11 @@ verfierConnexion();?>
             <?php endforeach; ?>
             </tbody>
         </table>
-
-        <?php else: ?>
-            <p class="text-muted">Aucune vente aujourd’hui.</p>
-        <?php endif; ?>
     </div>
+    <?php else: ?>
+        <p class="text-muted">Aucune vente aujourd’hui.</p>
+    <?php endif; ?>
+</div>
 
 
     <!-- SECTION PAIEMENTS -->

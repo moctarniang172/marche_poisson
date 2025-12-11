@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../authers/fonctions.php';
 redirectIfLogged();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -14,34 +16,37 @@ redirectIfLogged();
 <body class="bg-light">
 
 <div class="container mt-5">
-    <div class="col-md-5 offset-md-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-5">
 
-        <div class="card p-4 shadow">
-            <h3 class="text-center mb-4">Connexion</h3>
+            <div class="card p-4 p-sm-5 shadow">
+                <h3 class="text-center mb-4">Connexion</h3>
 
-            <form action="../controllers/controllersLogin.php" method="POST">
+                <form action="../controllers/controllersLogin.php" method="POST">
 
-                <div class="mb-3">
-                    <label>Téléphone</label>
-                    <input type="tel" name="telephone" class="form-control" required>
-                </div>
+                    <div class="mb-3">
+                        <label>Téléphone</label>
+                        <input type="tel" name="telephone" class="form-control" required>
+                    </div>
 
-                <div class="mb-3">
-                    <label>Mot de passe</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
+                    <div class="mb-3">
+                        <label>Mot de passe</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
 
-                <button class="btn btn-success w-100">Se connecter</button>
+                    <button class="btn btn-success w-100">Se connecter</button>
 
-                <p class="text-center mt-3">
-                    Pas de compte ? <a href="inscription.php">Inscription</a>
-                </p>
+                    <p class="text-center mt-3">
+                        Pas de compte ? <a href="inscription.php">Inscription</a>
+                    </p>
 
-            </form>
+                </form>
+            </div>
+
         </div>
-
     </div>
 </div>
+
 
 </body>
 </html>

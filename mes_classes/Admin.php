@@ -3,7 +3,7 @@
 class Admin
 {
     /* ---------------- LISTE DE TOUS LES UTILISATEURS ---------------- */
-    public function getUsers($conn)
+    public static function getUsers($conn)
     {
         $sql = "SELECT * FROM users ORDER BY id DESC";
         $stmt = $conn->prepare($sql);
@@ -37,16 +37,17 @@ class Admin
     }
 
     /* ---------------- MODIFIER UN UTILISATEUR ---------------- */
-    public function updateUser($conn, $id, $nom, $email, $role)
+    public function updateUser($conn, $id, $nom,$prenom, $telephone, $role)
     {
-        $sql = "UPDATE users SET nom = :nom, email = :email, role = :role 
+        $sql = "UPDATE users SET nom = :nom, prenom = :prenom, telephone = :telephone, role = :role 
                 WHERE id = :id";
         $stmt = $conn->prepare($sql);
 
         return $stmt->execute([
             'id'      => $id,
             'nom'     => $nom,
-            'email'   => $email,
+            'prenom' =>$prenom,
+            'telephone'   => $telephone,
             'role'    => $role
         ]);
     }

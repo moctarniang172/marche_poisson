@@ -1,13 +1,11 @@
 <?php
+ini_set("display_errors",1);
+error_reporting(E_ALL);
 require_once('../mes_classes/Database.php');
 require_once('../mes_classes/Admin.php');
-session_start();
-
+require_once('../authers/fonctions.php');
 /* Vérifier si c'est vraiment un admin */
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] != 'admin') {
-    header("Location: ../views/connexion.php");
-    exit;
-}
+verifierAdmin();
 
 $db = new Database();
 $conn = $db->getConnection();
@@ -24,7 +22,7 @@ if ($action === "addUser") {
 
     $admin->addUser($conn, $nom, $email, $password, $role);
 
-    header("Location: ../views/admin/users_list.php?success=1");
+    header("Location: ../views/admin/user_liste.php?success=1");
     exit;
 }
 
@@ -32,12 +30,13 @@ if ($action === "addUser") {
 if ($action === "updateUser") {
     $id    = $_POST['id'];
     $nom   = $_POST['nom'];
-    $email = $_POST['email'];
+    $prenom   = $_POST['prenom'];
+    $telephone = $_POST['telephone'];
     $role  = $_POST['role'];
 
-    $admin->updateUser($conn, $id, $nom, $email, $role);
+    $admin->updateUser($conn, $id, $nom,$prenom, $telephone, $role);
 
-    header("Location: ../views/admin/users_list.php?updated=1");
+    header("Location: ../views/admins/user_liste.php?updated=1");
     exit;
 }
 
@@ -47,7 +46,7 @@ if ($action === "supprimer") {
     
     $admin->deleteUser($conn, $id);
 
-    header("Location: ../views/admin/users_list.php?deleted=1");
+    header("Location: ../views/admin/user_liste.php?deleted=1");
     exit;
 }
 

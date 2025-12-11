@@ -117,4 +117,8 @@ class Fonction {
         return $stmt->fetchall(PDO::FETCH_ASSOC);
     }
 
+    //recuperer le bilan de chaque utilisateur pour admin
+ 
+
+
 }

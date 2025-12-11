@@ -1,0 +1,250 @@
+/* Reset */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Conteneur global */
+.container{
+    display: flex;
+    min-height: 100vh;
+    background: #f5f6f7;
+    
+}
+
+/* Sidebar */
+.sidebar{
+    width: 250px;
+    background: #1e293b;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo{
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.menu li{
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.menu a{
+    text-decoration: none;
+    color: #cbd5e1;
+    font-size: 16px;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+.menu a:hover,
+.menu a.active{
+    background: #0ea5e9;
+    color: #fff;
+}
+
+.logout{
+    margin-top: 40px;
+    background: #dc2626 !important;
+    color: white !important;
+}
+
+/* Contenu principal */
+.content{
+    flex: 1;
+    padding: 40px;
+}
+
+.titre-page{
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #0f172a;
+}
+
+/* Grille des cartes */
+.grid-cards{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* Card utilisateur */
+.card{
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 7px rgba(0,0,0,0.1);
+}
+
+.card h3{
+    margin-bottom: 15px;
+    font-size: 22px;
+    color: #1e293b;
+}
+
+.card p{
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.solde{
+    font-weight: bold;
+    color: #0ea5e9;
+}
+
+.btn-details{
+    margin-top: 15px;
+    display: inline-block;
+    background: #0ea5e9;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.btn-details:hover{
+    background: #0284c7;
+}
+/* ----------------------------- */
+/* PAGE : GESTION DES UTILISATEURS */
+/* ----------------------------- */
+
+.header-users{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.btn-add{
+    background: #10b981;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: .2s;
+}
+
+.btn-add:hover{
+    background: #059669;
+}
+
+/* TABLE */
+.table-container{
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 7px rgba(0,0,0,0.1);
+}
+
+.table-users{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-users th{
+    background: #1e293b;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.table-users td{
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table-users tr:hover{
+    background: #f1f5f9;
+}
+
+/* ACTIONS */
+.btn-edit{
+    background: #0ea5e9;
+    padding: 6px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: .2s;
+}
+
+.btn-edit:hover{
+    background: #0284c7;
+}
+
+.btn-delete{
+    background: #dc2626;
+    padding: 6px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: .2s;
+}
+
+.btn-delete:hover{
+    background: #b91c1c;
+}
+/* FORMULAIRE MODIFIER USER */
+.card-form{
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 450px;
+    box-shadow: 0 3px 7px rgba(0,0,0,0.1);
+}
+
+.card-form form{
+    display: flex;
+    flex-direction: column;
+}
+
+.card-form label{
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.card-form input,
+.card-form select{
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    margin-top: 5px;
+    font-size: 15px;
+}
+
+.btn-save{
+    background: #0ea5e9;
+    color: white;
+    padding: 12px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-save:hover{
+    background: #0284c7;
+}
+
+.btn-back{
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #475569;
+}
+
+

@@ -173,6 +173,15 @@ public function listedette($conn,$user_id){
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+//recuperer les ventes de chaque utilisateur pour l'admin
+public static function getVentesByUser($connexion, $user_id){
+    $sql = "SELECT * FROM ventes WHERE user_id = :user_id ORDER BY date_vente DESC";
+    $stmt = $connexion->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 
 }

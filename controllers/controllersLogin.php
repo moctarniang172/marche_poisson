@@ -21,10 +21,16 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         // créer session
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['nom'] = $user['nom'];
-
-        // Redirection corrigée
+        $_SESSION['user_role']= $user['role'];
+        
+        // Redirection selon le rôle
+    if($_SESSION['user_role'] === 'admin'){
+        header("Location: ../views/admins/dashboard.php");
+        exit;
+    } else {
         header("Location: ../views/ajouter_vente.php");
         exit;
+    }
     } else {
         header("Location: ../views/connexion.php?error=1");
         exit;
